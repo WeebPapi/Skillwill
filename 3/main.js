@@ -1,3 +1,4 @@
+
 //davaleba 1
 const twoMemberArray = (a, b, ...arr) => {
     let sum = a + b
@@ -72,6 +73,7 @@ const cloneObj = (myObj) => {
     }
     return clonedObj
 }
+console.log(document.querySelectorAll('#france'))
 
 
 
