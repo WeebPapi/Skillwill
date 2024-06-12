@@ -1,0 +1,15 @@
+{
+  "name": "9",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "main.js",
+  "scripts": {
+    "test": "hello"
+  },
+  "author": "Aleksandre Kapanadze",
+  "license": "ISC",
+  "dependencies": {
+    "validator": "^13.12.0"
+  }
+}
