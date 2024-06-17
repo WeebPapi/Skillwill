@@ -1,0 +1,39 @@
+.App {
+  text-align: center;
+  height: 100vh;
+  background-image: url("./assets/large-triangles.svg");
+}
+body {
+  width: 100%;
+}
+h1 {
+  margin: 0;
+  color: white;
+}
+.projects-cards {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.card {
+  max-width: 25%;
+  width: 100%;
+  height: max-content;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.card > img {
+  padding-top: 2rem;
+}
+.card > h3 {
+  font-size: 28px;
+}
+.card > p {
+  max-width: 50%;
+  font-size: 20px;
+  width: 100%;
+  padding-bottom: 2rem;
+}
