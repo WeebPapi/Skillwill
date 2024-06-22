@@ -1,0 +1,28 @@
+.bookcard {
+  max-width: 370px;
+  width: 100%;
+  max-height: 650px;
+  height: 100%;
+  border: 2px solid darkslategrey;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+.bookcard > * {
+  margin: 0.5rem 1rem;
+}
+img {
+  width: 60%;
+  object-fit: contain;
+}
+h1 {
+  font-size: 24px;
+}
+h2 {
+  font-size: 16px;
+}
+p,
+li {
+  font-size: 14px;
+}
