@@ -1,0 +1,16 @@
+.task {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid lightblue;
+  width: 100%;
+  max-width: 250px;
+}
+h2 {
+  font-size: 16px;
+}
+button {
+  width: 90px;
+  max-height: 40px;
+  font-size: 12px;
+}
