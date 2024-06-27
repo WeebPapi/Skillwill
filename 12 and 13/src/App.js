@@ -1,15 +1,21 @@
 import Complete from "./components/Complete";
 import NotComplete from "./components/NotComplete";
 import "./App.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function App() {
   const [value, setValue] = useState("");
   const [completeList, setCompleteList] = useState([]);
   const [incompleteList, setIncompleteList] = useState([]);
-  const handleClick = () => {
-    setIncompleteList([...incompleteList, value]);
-  };
+  const [buttonClicked, setButtonClicked] = useState(false);
+  useEffect(() => {
+    const handleClick = () => {
+      setIncompleteList([...incompleteList, value]);
+    };
+    if (buttonClicked) handleClick();
+
+    setButtonClicked(false);
+  }, [buttonClicked]);
   return (
     <div className="App">
       <h1>ToDo</h1>
@@ -24,7 +30,12 @@ function App() {
               setValue(e.target.value);
             }}
           ></input>
-          <button type="button" onClick={handleClick}>
+          <button
+            type="button"
+            onClick={() => {
+              setButtonClicked(true);
+            }}
+          >
             Add Task
           </button>
         </div>
