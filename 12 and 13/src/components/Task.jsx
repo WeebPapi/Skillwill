@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import "./Task.css";
 
 const Task = ({
@@ -9,20 +9,20 @@ const Task = ({
   setIncompleteList,
   complete,
 }) => {
-  const handleComplete = () => {
+  const handleComplete = useCallback(() => {
     let index = incompleteList.indexOf(title);
-    setCompleteList([...completeList, incompleteList[index]]);
-    setIncompleteList(incompleteList.filter((_, ind) => ind !== index));
-  };
-  const handleIncomplete = () => {
+    setCompleteList((prev) => [...prev, incompleteList[index]]);
+    setIncompleteList((prev) => prev.filter((_, ind) => ind !== index));
+  }, [title]);
+  const handleIncomplete = useCallback(() => {
     let index = completeList.indexOf(title);
-    setIncompleteList([...incompleteList, completeList[index]]);
-    setCompleteList(completeList.filter((_, ind) => ind !== index));
-  };
-  const handleDelete = () => {
+    setIncompleteList((prev) => [...prev, completeList[index]]);
+    setCompleteList((prev) => prev.filter((_, ind) => ind !== index));
+  }, [title]);
+  const handleDelete = useCallback(() => {
     let index = completeList.indexOf(title);
-    setCompleteList(completeList.filter((_, ind) => ind !== index));
-  };
+    setCompleteList((prev) => prev.filter((_, ind) => ind !== index));
+  }, [title]);
 
   return (
     <div className="task">
@@ -42,4 +42,4 @@ const Task = ({
   );
 };
 
-export default Task;
+export default React.memo(Task);

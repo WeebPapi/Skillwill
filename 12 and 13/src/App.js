@@ -1,7 +1,7 @@
 import Complete from "./components/Complete";
 import NotComplete from "./components/NotComplete";
 import "./App.css";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 function App() {
   const [value, setValue] = useState("");
