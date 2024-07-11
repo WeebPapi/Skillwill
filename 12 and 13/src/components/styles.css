@@ -1,3 +1,6 @@
+.lists {
+  margin-top: 2rem;
+}
 .list {
   width: 350px;
   height: 100%;
@@ -8,6 +11,28 @@
 }
 .list > * {
   margin-bottom: 2rem;
+}
+.list-header {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  border-bottom: 3px solid;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+}
+.list-header > * {
+  margin-right: 1rem;
+}
+.list-header > h1 {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 28px;
+}
+.dividing-line {
+  width: 2px;
+  height: 25px;
+  background-color: lightgray;
 }
 .not-complete,
 .complete {

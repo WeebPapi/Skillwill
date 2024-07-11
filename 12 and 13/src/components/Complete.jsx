@@ -10,7 +10,11 @@ const Complete = ({
 }) => {
   return (
     <div className="complete">
-      <h1>Complete</h1>
+      <div className="list-header">
+        <h1>Complete</h1>
+        <div className="dividing-line"></div>
+        <h1>{completeList.length}</h1>
+      </div>
       <div className="list">
         {completeList.map((item, index) => (
           <Task

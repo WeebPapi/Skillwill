@@ -10,7 +10,11 @@ const NotComplete = ({
 }) => {
   return (
     <div className="not-complete">
-      <h1>Incomplete</h1>
+      <div className="list-header" style={{ borderColor: "crimson" }}>
+        <h1>Backlog</h1>
+        <div className="dividing-line"></div>
+        <h1>{incompleteList.length}</h1>
+      </div>
       <div className="list">
         {incompleteList.map((item, index) => (
           <Task
