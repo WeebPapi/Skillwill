@@ -1,0 +1,14 @@
+.input-field {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.input-field > a {
+  text-decoration: none;
+  color: white;
+  background-color: navy;
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
