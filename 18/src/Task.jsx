@@ -1,7 +1,14 @@
-import React, { useEffect, useState, useRef, useReducer } from "react";
+import React, {
+  useEffect,
+  useState,
+  useRef,
+  useReducer,
+  useContext,
+} from "react";
 import { Link } from "react-router-dom";
 import { axiosInstance } from "./App";
 import "./Task.css";
+import { LangContext } from ".";
 
 const Task = ({
   title,
@@ -16,27 +23,53 @@ const Task = ({
   setIncompleteList,
   associatedArr,
 }) => {
+  const context = useContext(LangContext);
   const [isComplete, setIsComplete] = useState(completion);
   const formatDate = (currentDate) => {
     const date = new Date(currentDate);
     const day = date.getDate();
     const month = date.getMonth();
     const hour = date.getHours();
-    const months = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ];
-    return `${day} ${months[month]} at ${hour}`;
+    const months =
+      context.lang === "en"
+        ? [
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dec",
+          ]
+        : [
+            "იან",
+            "თებ",
+            "მარ",
+            "აპრ",
+            "მაი",
+            "ივნ",
+            "ივლ",
+            "აგვ",
+            "სექ",
+            "ოქტ",
+            "ნოვ",
+            "დეკ",
+          ];
+    return `${day} ${months[month]} ${
+      context.lang === "en" ? "at" : ""
+    } ${hour} ${context.lang === "en" ? "" : "საათზე"}`;
+  };
+  const text = {
+    complete: context.lang === "en" ? "Mark Complete" : "მონიშნე დასრულებულად",
+    incomplete:
+      context.lang === "en" ? "Mark Incomplete" : "მონიშნე დაუსრულებლად",
+    edit: context.lang === "en" ? "Edit" : "რედაქტირება",
+    delete: context.lang === "en" ? "Delete" : "წაშლა",
   };
   const handleCompletion = () => {
     setIsComplete((prev) => {
@@ -95,13 +128,13 @@ const Task = ({
         <p>{`${firstName} ${lastName}`}</p>
         <div className="task-bottom-buttons">
           <button type="button" onClick={handleCompletion}>
-            {isComplete ? "Mark Incomplete" : "Mark Complete"}
+            {isComplete ? text.incomplete : text.complete}
           </button>
           <Link to={`/Edit/${keyId}`}>
-            <button type="button">Edit</button>
+            <button type="button">{text.edit}</button>
           </Link>
           <button type="button" onClick={handleDeletion}>
-            Delete
+            {text.delete}
           </button>
         </div>
       </div>

@@ -1,8 +1,9 @@
 import logo from "./logo.svg";
 import axios from "axios";
 import "./App.css";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Task from "./Task";
+import { LangContext } from ".";
 
 const axiosInstance = axios.create({
   baseURL: "https://crudapi.co.uk/api/v1",
@@ -11,7 +12,9 @@ const axiosInstance = axios.create({
     "Content-Type": "application/json",
   },
 });
+
 function App() {
+  const context = useContext(LangContext);
   const [task, setTask] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -19,6 +22,16 @@ function App() {
   const [allTasks, setAllTasks] = useState([]);
   const [incompleteTasks, setIncompleteTasks] = useState([]);
   const [completeTasks, setCompleteTasks] = useState([]);
+  const text = {
+    todo: context.lang === "en" ? "To-Do" : "დავალებები",
+    taskName: context.lang === "en" ? "Task Name" : "დავალების სახელი",
+    firstName: context.lang === "en" ? "First Name" : "სახელი",
+    lastName: context.lang === "en" ? "Last Name" : "გვარი",
+    submit: context.lang === "en" ? "Submit" : "დამატება",
+    deadline: context.lang === "en" ? "Deadline" : "ბოლო ვადა",
+    incomplete: context.lang === "en" ? "Incomplete" : "დაუსრულებელი",
+    complete: context.lang === "en" ? "Complete" : "დასრულებული",
+  };
   const publishTask = () => {
     const payload = JSON.stringify([
       {
@@ -66,36 +79,15 @@ function App() {
       setCompleteTasks(newAllTasks.filter((item) => item.isComplete));
     });
   };
-  const handleTaskCompletion = (taskId, newIsComplete) => {
-    setAllTasks((prevTasks) =>
-      prevTasks.map((task) =>
-        task.id === taskId ? { ...task, isComplete: newIsComplete } : task
-      )
-    );
-
-    if (newIsComplete) {
-      setCompleteTasks((prev) => [
-        ...prev,
-        allTasks.find((task) => task.id === taskId),
-      ]);
-      setIncompleteTasks((prev) => prev.filter((task) => task.id !== taskId));
-    } else {
-      setIncompleteTasks((prev) => [
-        ...prev,
-        allTasks.find((task) => task.id === taskId),
-      ]);
-      setCompleteTasks((prev) => prev.filter((task) => task.id !== taskId));
-    }
-  };
 
   useEffect(retrieveIncompleteTasks, []);
 
   return (
     <div className="App">
-      <h1>To-Do</h1>
+      <h1>{text.todo}</h1>
       <div className="input-field">
         <div className="inputLabel">
-          <label htmlFor="task">Task Name</label>
+          <label htmlFor="task">{text.taskName}</label>
           <input
             name="task"
             value={task}
@@ -106,7 +98,7 @@ function App() {
           />
         </div>
         <div className="inputLabel">
-          <label htmlFor="firstName">First Name</label>
+          <label htmlFor="firstName">{text.firstName}</label>
           <input
             name="firstName"
             value={firstName}
@@ -117,7 +109,7 @@ function App() {
           />
         </div>
         <div className="inputLabel">
-          <label htmlFor="lastName">Last Name</label>
+          <label htmlFor="lastName">{text.lastName}</label>
           <input
             name="lastName"
             value={lastName}
@@ -128,7 +120,7 @@ function App() {
           />
         </div>
         <div className="inputLabel">
-          <label htmlFor="deadline">Deadline</label>
+          <label htmlFor="deadline">{text.deadline}</label>
           <input
             name="deadline"
             value={deadline}
@@ -139,20 +131,12 @@ function App() {
           />
         </div>
         <button type="button" onClick={publishTask}>
-          Submit
-        </button>
-        <button
-          type="button"
-          onClick={() => {
-            setIncompleteTasks([]);
-          }}
-        >
-          Clear
+          {text.submit}
         </button>
       </div>
       <div className="lists">
         <div className="list">
-          <h2>Incomplete</h2>
+          <h2>{text.incomplete}</h2>
           {incompleteTasks.map((task) => (
             <Task
               allTasks={allTasks}
@@ -172,7 +156,7 @@ function App() {
           ))}
         </div>
         <div className="list">
-          <h2>Complete</h2>
+          <h2>{text.complete}</h2>
           {completeTasks.map((task) => (
             <Task
               allTasks={allTasks}

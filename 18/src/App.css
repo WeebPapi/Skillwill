@@ -8,3 +8,9 @@
   justify-content: flex-start;
   align-items: center;
 }
+.toggle > img {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  cursor: pointer;
+}

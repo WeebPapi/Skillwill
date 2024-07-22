@@ -1,15 +1,23 @@
 import React from "react";
 import "./Editing.css";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { axiosInstance } from "../../App";
 import { useParams, Link } from "react-router-dom";
+import { LangContext } from "../..";
 
 const Editing = () => {
+  const context = useContext(LangContext);
   const [task, setTask] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [deadline, setDeadline] = useState(new Date());
   const { taskId } = useParams();
+  const text = {
+    taskName: context.lang === "en" ? "Task Name" : "დავალების სახელი",
+    firstName: context.lang === "en" ? "First Name" : "სახელი",
+    lastName: context.lang === "en" ? "Last Name" : "გვარი",
+    save: context.lang === "en" ? "Save Edit" : "შენახვა",
+  };
   const handleSave = () => {
     if (taskId) {
       const payload = {
@@ -27,7 +35,7 @@ const Editing = () => {
     <div className="edit-container">
       <div className="input-field">
         <div className="inputLabel">
-          <label htmlFor="task">Task Name</label>
+          <label htmlFor="task">{text.taskName}</label>
           <input
             name="task"
             value={task}
@@ -38,7 +46,7 @@ const Editing = () => {
           />
         </div>
         <div className="inputLabel">
-          <label htmlFor="firstName">First Name</label>
+          <label htmlFor="firstName">{text.firstName}</label>
           <input
             name="firstName"
             value={firstName}
@@ -49,7 +57,7 @@ const Editing = () => {
           />
         </div>
         <div className="inputLabel">
-          <label htmlFor="lastName">Last Name</label>
+          <label htmlFor="lastName">{text.lastName}</label>
           <input
             name="lastName"
             value={lastName}
@@ -60,7 +68,7 @@ const Editing = () => {
           />
         </div>
         <div className="inputLabel">
-          <label htmlFor="deadline">Deadline</label>
+          <label htmlFor="deadline">{text.deadline}</label>
           <input
             name="deadline"
             value={deadline}
@@ -71,7 +79,7 @@ const Editing = () => {
           />
         </div>
         <Link to={"/"} type="button" onClick={handleSave}>
-          Save Edit
+          {text.save}
         </Link>
       </div>
       ;
