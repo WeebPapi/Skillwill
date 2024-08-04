@@ -1,0 +1,28 @@
+.lists {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 100%;
+}
+.lists-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.lists-wrapper > a {
+  margin-top: 2rem;
+  height: 100vh;
+}
+.incomplete-list,
+.complete-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  height: 100%;
+}
+.incomplete-list > *,
+.complete-list > * {
+  margin-bottom: 12px;
+}
