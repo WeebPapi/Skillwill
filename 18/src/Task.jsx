@@ -9,6 +9,8 @@ import { Link } from "react-router-dom";
 import { axiosInstance } from "./App";
 import "./Task.css";
 import { LangContext } from ".";
+import { useDispatch } from "react-redux";
+import { sortTodos } from "./store/todos.slice";
 
 const Task = ({
   title,
@@ -23,6 +25,7 @@ const Task = ({
   setIncompleteList,
   associatedArr,
 }) => {
+  const dispatch = useDispatch();
   const context = useContext(LangContext);
   const [isComplete, setIsComplete] = useState(completion);
   const formatDate = (currentDate) => {
@@ -95,19 +98,20 @@ const Task = ({
   };
 
   useEffect(() => {
-    if (isComplete && incompleteList) {
-      setCompleteList((prev) => [
-        ...incompleteList.filter((item) => item.id === keyId),
-        ...prev,
-      ]);
-      setIncompleteList((prev) => prev.filter((item) => item.id !== keyId));
-    } else if (!isComplete && completeList) {
-      setIncompleteList((prev) => [
-        ...completeList.filter((item) => item.id === keyId),
-        ...prev,
-      ]);
-      setCompleteList((prev) => prev.filter((item) => item.id !== keyId));
-    }
+    // if (isComplete && incompleteList) {
+    //   setCompleteList((prev) => [
+    //     ...incompleteList.filter((item) => item.id === keyId),
+    //     ...prev,
+    //   ]);
+    //   setIncompleteList((prev) => prev.filter((item) => item.id !== keyId));
+    // } else if (!isComplete && completeList) {
+    //   setIncompleteList((prev) => [
+    //     ...completeList.filter((item) => item.id === keyId),
+    //     ...prev,
+    //   ]);
+    //   setCompleteList((prev) => prev.filter((item) => item.id !== keyId));
+    // }
+    dispatch(sortTodos());
   }, [isComplete]);
 
   return (

@@ -1,9 +1,12 @@
-import logo from "./logo.svg";
+import React from "react";
 import axios from "axios";
 import "./App.css";
 import { useContext, useEffect, useState } from "react";
 import Task from "./Task";
 import { LangContext } from ".";
+import { useDispatch, useSelector } from "react-redux";
+import { addTodo, getTodos } from "./store/todos.thunks";
+import { sortTodos } from "./store/todos.slice";
 
 const axiosInstance = axios.create({
   baseURL: "https://crudapi.co.uk/api/v1",
@@ -22,6 +25,9 @@ function App() {
   const [allTasks, setAllTasks] = useState([]);
   const [incompleteTasks, setIncompleteTasks] = useState([]);
   const [completeTasks, setCompleteTasks] = useState([]);
+  const dispatch = useDispatch();
+  const todos = useSelector((state) => state.todos);
+  const { theme } = useSelector((state) => state.theme);
   const text = {
     todo: context.lang === "en" ? "To-Do" : "დავალებები",
     taskName: context.lang === "en" ? "Task Name" : "დავალების სახელი",
@@ -43,26 +49,10 @@ function App() {
       },
     ]);
 
-    axiosInstance
-      .post("/tasks", payload)
-      .then((res) => {
-        setIncompleteTasks((prev) => [
-          {
-            taskName: res.data.items[0].taskName,
-            id: res.data.items[0]._uuid,
-            isComplete: res.data.items[0].isComplete,
-            firstName: res.data.items[0].firstName,
-            lastName: res.data.items[0].lastName,
-            deadline: res.data.items[0].deadline,
-          },
-          ...prev,
-        ]);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    dispatch(addTodo(payload));
   };
   const retrieveIncompleteTasks = () => {
+    dispatch(getTodos());
     axiosInstance.get("/tasks").then((res) => {
       const newAllTasks = res.data.items.map((item) => {
         return {
@@ -81,9 +71,15 @@ function App() {
   };
 
   useEffect(retrieveIncompleteTasks, []);
-
   return (
-    <div className="App">
+    <div
+      className="App"
+      style={
+        theme === "dark"
+          ? { backgroundColor: "#242424", color: "white" }
+          : { backgroundColor: "white", color: "black" }
+      }
+    >
       <h1>{text.todo}</h1>
       <div className="input-field">
         <div className="inputLabel">
@@ -137,7 +133,7 @@ function App() {
       <div className="lists">
         <div className="list">
           <h2>{text.incomplete}</h2>
-          {incompleteTasks.map((task) => (
+          {todos.incompleteTodos.map((task) => (
             <Task
               allTasks={allTasks}
               title={task.taskName}
@@ -157,7 +153,7 @@ function App() {
         </div>
         <div className="list">
           <h2>{text.complete}</h2>
-          {completeTasks.map((task) => (
+          {todos.completeTodos.map((task) => (
             <Task
               allTasks={allTasks}
               title={task.taskName}
