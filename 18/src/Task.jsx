@@ -1,30 +1,11 @@
-import React, {
-  useEffect,
-  useState,
-  useRef,
-  useReducer,
-  useContext,
-} from "react";
+import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
-import { axiosInstance } from "./App";
 import "./Task.css";
 import { LangContext } from ".";
 import { useDispatch } from "react-redux";
-import { sortTodos } from "./store/todos.slice";
+import { toggleCompletion, removeTodo } from "./store/todos.thunks";
 
-const Task = ({
-  title,
-  keyId,
-  deadline,
-  firstName,
-  lastName,
-  completion,
-  completeList,
-  incompleteList,
-  setCompleteList,
-  setIncompleteList,
-  associatedArr,
-}) => {
+const Task = ({ title, keyId, deadline, firstName, lastName, completion }) => {
   const dispatch = useDispatch();
   const context = useContext(LangContext);
   const [isComplete, setIsComplete] = useState(completion);
@@ -65,7 +46,7 @@ const Task = ({
           ];
     return `${day} ${months[month]} ${
       context.lang === "en" ? "at" : ""
-    } ${hour} ${context.lang === "en" ? "" : "საათზე"}`;
+    } ${hour} ${context.lang === "en" ? "o'Clock" : "საათზე"}`;
   };
   const text = {
     complete: context.lang === "en" ? "Mark Complete" : "მონიშნე დასრულებულად",
@@ -75,44 +56,12 @@ const Task = ({
     delete: context.lang === "en" ? "Delete" : "წაშლა",
   };
   const handleCompletion = () => {
-    setIsComplete((prev) => {
-      const newIsComplete = !prev;
-      let url = "/tasks";
-      let payload = [
-        {
-          _uuid: keyId,
-          isComplete: newIsComplete,
-        },
-      ];
-      axiosInstance.put(url, payload).catch((err) => console.log(err));
-      return newIsComplete;
-    });
+    dispatch(toggleCompletion({ id: keyId, isComplete }));
   };
 
   const handleDeletion = () => {
-    if (keyId) {
-      const url = `/tasks/${keyId}`;
-      axiosInstance.delete(url).catch((err) => console.log(err));
-    }
-    associatedArr((prev) => prev.filter((item) => item.id !== keyId));
+    dispatch(removeTodo(keyId));
   };
-
-  useEffect(() => {
-    // if (isComplete && incompleteList) {
-    //   setCompleteList((prev) => [
-    //     ...incompleteList.filter((item) => item.id === keyId),
-    //     ...prev,
-    //   ]);
-    //   setIncompleteList((prev) => prev.filter((item) => item.id !== keyId));
-    // } else if (!isComplete && completeList) {
-    //   setIncompleteList((prev) => [
-    //     ...completeList.filter((item) => item.id === keyId),
-    //     ...prev,
-    //   ]);
-    //   setCompleteList((prev) => prev.filter((item) => item.id !== keyId));
-    // }
-    dispatch(sortTodos());
-  }, [isComplete]);
 
   return (
     <div

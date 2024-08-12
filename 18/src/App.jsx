@@ -6,7 +6,6 @@ import Task from "./Task";
 import { LangContext } from ".";
 import { useDispatch, useSelector } from "react-redux";
 import { addTodo, getTodos } from "./store/todos.thunks";
-import { sortTodos } from "./store/todos.slice";
 
 const axiosInstance = axios.create({
   baseURL: "https://crudapi.co.uk/api/v1",
@@ -22,9 +21,6 @@ function App() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [deadline, setDeadline] = useState(new Date());
-  const [allTasks, setAllTasks] = useState([]);
-  const [incompleteTasks, setIncompleteTasks] = useState([]);
-  const [completeTasks, setCompleteTasks] = useState([]);
   const dispatch = useDispatch();
   const todos = useSelector((state) => state.todos);
   const { theme } = useSelector((state) => state.theme);
@@ -39,7 +35,7 @@ function App() {
     complete: context.lang === "en" ? "Complete" : "დასრულებული",
   };
   const publishTask = () => {
-    const payload = JSON.stringify([
+    const payload = [
       {
         taskName: task ? task : "",
         firstName: firstName ? firstName : "",
@@ -47,30 +43,15 @@ function App() {
         deadline: deadline ? deadline : "",
         isComplete: false,
       },
-    ]);
+    ];
 
     dispatch(addTodo(payload));
   };
-  const retrieveIncompleteTasks = () => {
+  const getTasks = () => {
     dispatch(getTodos());
-    axiosInstance.get("/tasks").then((res) => {
-      const newAllTasks = res.data.items.map((item) => {
-        return {
-          taskName: item.taskName,
-          id: item._uuid,
-          isComplete: item.isComplete,
-          firstName: item.firstName,
-          lastName: item.lastName,
-          deadline: item.deadline,
-        };
-      });
-      setAllTasks(newAllTasks);
-      setIncompleteTasks(newAllTasks.filter((item) => !item.isComplete));
-      setCompleteTasks(newAllTasks.filter((item) => item.isComplete));
-    });
   };
 
-  useEffect(retrieveIncompleteTasks, []);
+  useEffect(getTasks, []);
   return (
     <div
       className="App"
@@ -135,7 +116,6 @@ function App() {
           <h2>{text.incomplete}</h2>
           {todos.incompleteTodos.map((task) => (
             <Task
-              allTasks={allTasks}
               title={task.taskName}
               firstName={task.firstName}
               lastName={task.lastName}
@@ -143,11 +123,6 @@ function App() {
               keyId={task.id}
               completion={false}
               key={task.id}
-              completeList={completeTasks}
-              incompleteList={incompleteTasks}
-              setCompleteList={setCompleteTasks}
-              setIncompleteList={setIncompleteTasks}
-              associatedArr={setIncompleteTasks}
             />
           ))}
         </div>
@@ -155,7 +130,6 @@ function App() {
           <h2>{text.complete}</h2>
           {todos.completeTodos.map((task) => (
             <Task
-              allTasks={allTasks}
               title={task.taskName}
               firstName={task.firstName}
               lastName={task.lastName}
@@ -163,11 +137,6 @@ function App() {
               keyId={task.id}
               completion={true}
               key={task.id}
-              completeList={completeTasks}
-              incompleteList={incompleteTasks}
-              setCompleteList={setCompleteTasks}
-              setIncompleteList={setIncompleteTasks}
-              associatedArr={setCompleteTasks}
             />
           ))}
         </div>

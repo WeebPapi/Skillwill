@@ -3,7 +3,9 @@ import "./Editing.css";
 import { useState, useContext } from "react";
 import { axiosInstance } from "../../App";
 import { useParams, Link } from "react-router-dom";
+import { updateTodo } from "../../store/todos.thunks";
 import { LangContext } from "../..";
+import { useDispatch } from "react-redux";
 
 const Editing = () => {
   const context = useContext(LangContext);
@@ -11,6 +13,7 @@ const Editing = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [deadline, setDeadline] = useState(new Date());
+  const dispatch = useDispatch();
   const { taskId } = useParams();
   const text = {
     taskName: context.lang === "en" ? "Task Name" : "დავალების სახელი",
@@ -25,10 +28,9 @@ const Editing = () => {
         firstName: firstName ? firstName : "",
         lastName: lastName ? lastName : "",
         deadline: deadline ? deadline : "",
+        id: taskId,
       };
-      axiosInstance
-        .put(`/tasks/${taskId}`, payload)
-        .catch((err) => console.log(err));
+      dispatch(updateTodo(payload));
     }
   };
   return (
