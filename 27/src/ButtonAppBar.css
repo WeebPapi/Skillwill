@@ -1,0 +1,19 @@
+.horizontal {
+  display: flex;
+  align-items: center;
+}
+.vertical {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+header:has(div.vertical) {
+  width: max-content;
+  height: 100vh;
+}
+.centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
