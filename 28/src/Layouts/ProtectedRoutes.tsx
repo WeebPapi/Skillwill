@@ -4,7 +4,7 @@ import { useSelector } from "react-redux"
 import { RootState } from "../store"
 
 const ProtectedRoutes = () => {
-  const token = useSelector<RootState>((state) => state.token)
+  const token = localStorage.getItem("token")
   const [authorized, setAuthorized] = React.useState(token ? true : false)
 
   return <>{authorized ? <Outlet /> : <Navigate to={"/authorization"} />}</>

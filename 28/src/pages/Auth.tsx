@@ -1,12 +1,9 @@
 import React from "react"
 import { axiosInstance } from "../axiosInstance"
 import { useNavigate } from "react-router-dom"
-import { useAppDispatch } from "../store"
-import { addToken } from "../store/auth.slice"
 
 const Auth = () => {
   const navigate = useNavigate()
-  const dispatch = useAppDispatch()
   const [variant, setVariant] = React.useState("Registration")
   const [email, setEmail] = React.useState("")
   const [password, setPassword] = React.useState("")
@@ -15,7 +12,8 @@ const Auth = () => {
       .post(variant.toLowerCase(), formData)
       .then((res) => {
         console.log(res.data)
-        dispatch(addToken(res.data.accessToken))
+        localStorage.setItem("token", res.data.accessToken)
+
         navigate("/")
       })
       .catch((err) => console.error(err))
